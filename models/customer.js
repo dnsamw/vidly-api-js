@@ -12,19 +12,19 @@ function validateCustomer(customer) {
 }
 
 //create a mongoose model
-const Customer = mongoose.model(
-  "Customer",
-  mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minLength: 3,
-      maxLength: 255,
-      trim: true,
-    },
-    isGold: { type: Boolean, default: false },
-    phone: { type: String, required: true, minLength: 10 },
-  })
-);
 
-module.exports = { Customer, validateCustomer };
+const customerSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minLength: 3,
+    maxLength: 255,
+    trim: true,
+  },
+  isGold: { type: Boolean, default: false },
+  phone: { type: String, required: true, minLength: 10 },
+});
+
+const Customer = mongoose.model("Customer", customerSchema);
+
+module.exports = { Customer, validateCustomer, customerSchema };

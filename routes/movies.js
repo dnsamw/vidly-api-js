@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Movie, movieSchema, validateMovie } = require("../models/movies");
+const { Movie, movieSchema, validateMovie } = require("../models/movie");
 const { Genre } = require("../models/genre");
 
 //get all

@@ -10,6 +10,7 @@ const rootRoutes = require("./routes/root");
 const customersRoutes = require("./routes/customers");
 const genresRoutes = require("./routes/genres");
 const moviesRoutes = require("./routes/movies");
+const rentalsRoute = require("./routes/rentals");
 
 dotenv.config();
 const app = express();
@@ -30,6 +31,7 @@ app.use("/", rootRoutes);
 app.use("/api/genres", genresRoutes);
 app.use("/api/customers", customersRoutes);
 app.use("/api/movies", moviesRoutes);
+app.use("/api/rentals", rentalsRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
