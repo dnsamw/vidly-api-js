@@ -3,6 +3,8 @@ const helmet = require("helmet");
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const log = require("./middleware/logger");
 
@@ -11,6 +13,7 @@ const customersRoutes = require("./routes/customers");
 const genresRoutes = require("./routes/genres");
 const moviesRoutes = require("./routes/movies");
 const rentalsRoute = require("./routes/rentals");
+const usersRoute = require("./routes/users");
 
 dotenv.config();
 const app = express();
@@ -32,6 +35,7 @@ app.use("/api/genres", genresRoutes);
 app.use("/api/customers", customersRoutes);
 app.use("/api/movies", moviesRoutes);
 app.use("/api/rentals", rentalsRoute);
+app.use("/api/users", usersRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

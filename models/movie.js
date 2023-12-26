@@ -5,7 +5,7 @@ const Joi = require("joi");
 function validateMovie(movie) {
   const movieJoiSchema = Joi.object({
     title: Joi.string().min(3).required(),
-    genreId: Joi.string().required(), // this is important.
+    genreId: Joi.objectId().required(), // this is important.
     numberInStock: Joi.number().required(),
     dailyRentalRate: Joi.number().required(),
   });

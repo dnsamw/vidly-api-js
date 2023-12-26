@@ -4,8 +4,8 @@ const { genreSchema } = require("./genre");
 
 function validateRental(rental) {
   const rentalJoiSchema = Joi.object({
-    movieId: Joi.string().required(), // this is important.
-    customerId: Joi.string().required(),
+    movieId: Joi.objectId().required(), // this is important.
+    customerId: Joi.objectId().required(),
   });
 
   return rentalJoiSchema.validate(rental);
