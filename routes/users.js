@@ -1,7 +1,10 @@
 const express = require("express");
 const _ = require("lodash");
-const { User, validateUser, userSchema } = require("../models/user");
+const bcrypt = require("bcrypt");
+const { User, validateUser } = require("../models/user");
 const router = express.Router();
+const auth = require("../middleware/auth");
+// const admin = require("../middleware/admin");
 
 // Register new user
 router.post("/", async (req, res) => {
@@ -15,11 +18,28 @@ router.post("/", async (req, res) => {
     if (user) return res.status(400).send("User already exists!");
 
     user = new User(_.pick(req.body, ["name", "email", "password"]));
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
     await user.save();
 
-    res.status(201).send(_.pick(user, ["_id", "name", "email"]));
+    const token = user.generateAuthToken();
+
+    res
+      .header("x-auth-token", token)
+      .status(201)
+      .send(_.pick(user, ["_id", "name", "email"]));
   } catch (error) {
     return res.status(400).send(error.message);
+  }
+});
+
+router.get("/me", auth, async (req, res) => {
+  const userId = req.user._id;
+  try {
+    const user = await User.findById(userId).select("-password");
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 });
 
@@ -46,7 +66,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //update one by id
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const id = req.params.id;
 
   const { error } = validateUser(req.body);

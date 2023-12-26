@@ -1,4 +1,3 @@
-const config = require("config");
 const helmet = require("helmet");
 const express = require("express");
 const dotenv = require("dotenv");
@@ -14,8 +13,14 @@ const genresRoutes = require("./routes/genres");
 const moviesRoutes = require("./routes/movies");
 const rentalsRoute = require("./routes/rentals");
 const usersRoute = require("./routes/users");
+const authRoute = require("./routes/auth");
 
 dotenv.config();
+console.log("JWT KEY :", process.env.jwtPrivateKey);
+if (!process.env.jwtPrivateKey) {
+  console.error("FATAL ERROR", "jwtPrivateKey is not defined!");
+  process.exit(1);
+}
 const app = express();
 
 app.use(express.json());
@@ -36,6 +41,7 @@ app.use("/api/customers", customersRoutes);
 app.use("/api/movies", moviesRoutes);
 app.use("/api/rentals", rentalsRoute);
 app.use("/api/users", usersRoute);
+app.use("/api/auth", authRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
